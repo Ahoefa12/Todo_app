@@ -21,42 +21,45 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
     projectProvider.fetchProjects();
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
-          child: Consumer<ProjectProvider>(builder: (context, provider, child) {
-            if (provider.projects.isEmpty) {
-              return Center(
-                child: 
-                  Text('Aucun projet trouvé')
-              );
-            } else {
-              return ListView.builder(
-                itemCount: provider.projects.length,
-                itemBuilder: (context, index){
-                  final project = provider.projects[index];
-                  return ListTile(
-                    leading: Icon(Icons.person),
-                    subtitle: Text(project.description),
-                    trailing: Text(project.status),
-                    title: Text(project.name),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context)=>TaskScreen(projectId: project.id)),
-                      );
-                    },
-                    // onLongPress: () {
-                    //   _showDialog(context, project);
-                    // },
-                  );
-                },
-              );
-            }
-          },)
-        )
+          child: Consumer<ProjectProvider>(
+            builder: (context, provider, child) {
+              if (provider.projects.isEmpty) {
+                return Center(child: Text('Aucun projet trouvé'));
+              } else {
+                return ListView.builder(
+                  itemCount: provider.projects.length,
+                  itemBuilder: (context, index) {
+                    final project = provider.projects[index];
+                    return ListTile(
+                      leading: Icon(Icons.person),
+                      subtitle: Text(project.description),
+                      trailing: Text(project.status),
+                      title: Text(project.name),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                TaskScreen(projectId: project.id!),
+                          ),
+                        );
+                      },
+                      // onLongPress: () {
+                      //   _showDialog(context, project);
+                      // },
+                    );
+                  },
+                );
+              }
+            },
+          ),
+        ),
       ],
     );
   }

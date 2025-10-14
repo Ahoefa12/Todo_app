@@ -5,31 +5,25 @@ import 'package:todo_app/providers/project.dart';
 import 'package:todo_app/providers/task.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers:
-     [
-      ChangeNotifierProvider(
-        create: (_) => ProjectProvider()
-      ),
-      ChangeNotifierProvider(
-        create: (_) => TaskProvider()
-      ),
-     ],
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProjectProvider()),
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
+      ],
       child: const MyApp(),
-  ));
+    ),
+  );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-       
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: HomeScreen(),
@@ -41,7 +35,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  
   final String title;
 
   @override
@@ -53,25 +46,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-     
       _counter++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
-       
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-       
+
         title: Text(widget.title),
       ),
       body: Center(
-       
         child: Column(
-          
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
