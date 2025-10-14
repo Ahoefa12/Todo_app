@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/home/project.dart';
 
 class AccueilScreen extends StatefulWidget {
   const AccueilScreen({super.key});
@@ -61,7 +62,9 @@ class _AccueilScreenState extends State<AccueilScreen> {
 
               child: FloatingActionButton(
                 backgroundColor: const Color.fromARGB(255, 12, 47, 75),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProjectScreen(),));
+                },
                 child: Text(
                   "Gerer projet",
                   style: TextStyle(color: Colors.white),

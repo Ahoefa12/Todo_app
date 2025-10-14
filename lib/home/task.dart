@@ -1,52 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/home/task.dart';
-import 'package:todo_app/providers/project.dart';
+import 'package:todo_app/providers/task.dart';
 
-class ProjectScreen extends StatefulWidget {
-  const ProjectScreen({super.key});
+class TaskScreen extends StatefulWidget {
+  final projectId;
+  const TaskScreen({super.key, required this.projectId });
 
   @override
-  State<ProjectScreen> createState() => _ProjectScreenState();
+  State<TaskScreen> createState() => _TaskScreenState();
 }
 
-class _ProjectScreenState extends State<ProjectScreen> {
+class _TaskScreenState extends State<TaskScreen> {
   @override
   void initState() {
     super.initState();
     // Appel de la récupération des catégories
-    final projectProvider = Provider.of<ProjectProvider>(
+    final taskProvider = Provider.of<TaskProvider>(
       context,
       listen: false,
     );
-    projectProvider.fetchProjects();
+    taskProvider.fetchTasks(widget.projectId);
   }
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
-          child: Consumer<ProjectProvider>(builder: (context, provider, child) {
-            if (provider.projects.isEmpty) {
+          child: Consumer<TaskProvider>(builder: (context, provider, child) {
+            if (provider.tasks.isEmpty) {
               return Center(
                 child: 
-                  Text('Aucun projet trouvé')
+                  Text('Aucune tâche trouvée')
               );
             } else {
               return ListView.builder(
-                itemCount: provider.projects.length,
+                itemCount: provider.tasks.length,
                 itemBuilder: (context, index){
-                  final project = provider.projects[index];
+                  final project = provider.tasks[index];
                   return ListTile(
                     leading: Icon(Icons.person),
                     subtitle: Text(project.description),
                     trailing: Text(project.status),
                     title: Text(project.name),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context)=>TaskScreen(projectId: project.id)),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context)=>),
+                      // );
                     },
                     // onLongPress: () {
                     //   _showDialog(context, project);
