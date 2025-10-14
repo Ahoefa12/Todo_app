@@ -11,20 +11,46 @@ class _AccueilScreenState extends State<AccueilScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 7, 100, 175),
-        title: Text("Focus Pro",style: TextStyle(
-          color: Colors.white
-        ),),
+        title: Text("Focus Pro", style: TextStyle(color: Colors.white)),
       ),
       body: Center(
         child: Column(
+          spacing: 10,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 70,
-              height: 70,
-              child: Image.asset("/assets/images/image.png"),
-            )
+            Center(
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage("assets/images/image.png"),
+              ),
+            ),
+
+            Text(
+              "Bienvenue sur notre Application",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                fontFamily: 'Poppins',
+              ),
+            ),
+            Text("Gérer vos projets et taches en toute simplicité"),
+            Container(
+              width: 150,
+              height: 40,
+
+              color: const Color.fromARGB(255, 12, 47, 75),
+
+              child: FloatingActionButton(
+                backgroundColor: const Color.fromARGB(255, 12, 47, 75),
+                onPressed: () {},
+                child: Text(
+                  "Gerer projet",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
           ],
         ),
       ),
