@@ -5,9 +5,9 @@ class TaskService {
   // String token= "mytoken" ;
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://127.0.0.1:8000/api',
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      // baseUrl: 'http://127.0.0.1:8000/api',
+      baseUrl: 'https://focuspro.dayal-enterprises.com/public/api',
+
       headers: {
         'Content-Type': 'application/json',
         // 'Authorization':'Bearer $token'
@@ -44,6 +44,22 @@ class TaskService {
       print("Tâche modifiée : ${response.data}");
     } catch (e) {
       print("Erreur lors de la modification : $e");
+    }
+  }
+
+  Future<TaskModel?> showTask(int taskId) async {
+    try {
+      final response = await _dio.get('/tasks/$taskId');
+      print("Tâche vue : ${response.data}");
+
+      // Si ton API retourne les données sous la clé 'data'
+      final data = response.data['data'];
+
+      // On convertit la réponse JSON en modèle TaskModel
+      return TaskModel.fromJson(data);
+    } catch (e) {
+      print("Erreur lors de la récupération de la tâche : $e");
+      return null;
     }
   }
 
