@@ -15,23 +15,7 @@ class _AccueilScreenState extends State<AccueilScreen> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 12, 47, 75),
         title: Text("Focus Pro", style: TextStyle(color: Colors.white)),
-        actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert), // ton icône ⋮
-            onSelected: (value) {
-              // Action selon l'option choisie
-              if (value == 'edit') {
-                print('Modifier');
-              } else if (value == 'delete') {
-                print('Supprimer');
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: 'edit', child: Text('Modifier')),
-              const PopupMenuItem(value: 'delete', child: Text('Supprimer')),
-            ],
-          ),
-        ],
+      
       ),
       body: Center(
         child: Column(
