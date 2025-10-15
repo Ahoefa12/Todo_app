@@ -322,11 +322,12 @@ class _TaskScreenState extends State<TaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           'Tâches du projet',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Color(0xFF4F46E5),
+        backgroundColor: const Color.fromARGB(255, 12, 47, 75),
       ),
       body: Consumer<TaskProvider>(
         builder: (context, provider, child) {
@@ -665,7 +666,7 @@ class _TaskScreenState extends State<TaskScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF4F46E5),
+        backgroundColor: const Color.fromARGB(255, 12, 47, 75),
         foregroundColor: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

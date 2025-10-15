@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/home/acceuil.dart';
-import 'package:todo_app/home/profil.dart';
 import 'package:todo_app/home/project.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,7 +13,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final homePages = [
     AccueilScreen(),
     ProjectScreen(),
-    ProfilScreen(),
   ];
 
   int currentIndex = 0;
@@ -32,11 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
         destinations: [
           NavigationDestination(icon: Icon(Icons.home), label: "Accueil"),
           NavigationDestination(icon: Icon(Icons.folder), label: "Projet"),
-          NavigationDestination(icon: Icon(Icons.person), label: "Profil"),
           ]
         ),
       
-
     );
   }
 }

@@ -49,7 +49,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Color(0xFF4F46E5),
+        backgroundColor: const Color.fromARGB(255, 12, 47, 75),
         elevation: 3,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
@@ -269,7 +269,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF4F46E5),
+        backgroundColor: const Color.fromARGB(255, 12, 47, 75),
         foregroundColor: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
