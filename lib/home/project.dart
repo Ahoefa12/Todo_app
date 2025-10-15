@@ -19,7 +19,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
   @override
   void initState() {
     super.initState();
-    final projectProvider = Provider.of<ProjectProvider>(context, listen: false);
+    final projectProvider = Provider.of<ProjectProvider>(
+      context,
+      listen: false,
+    );
     projectProvider.fetchProjects();
   }
 
@@ -33,8 +36,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
     final statusOptions = ['Tous', ...allStatuses];
 
     final filteredProjects = allProjects.where((project) {
-      final matchesSearch = project.name.toLowerCase().contains(_searchQuery.toLowerCase());
-      final matchesStatus = _selectedStatus == 'Tous' || project.status == _selectedStatus;
+      final matchesSearch = project.name.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      final matchesStatus =
+          _selectedStatus == 'Tous' || project.status == _selectedStatus;
       return matchesSearch && matchesStatus;
     }).toList();
 
@@ -93,7 +99,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         labelStyle: TextStyle(color: Colors.grey[600]),
                         prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -117,20 +126,25 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         labelStyle: TextStyle(color: Colors.grey[600]),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                        prefixIcon: Icon(Icons.filter_list, color: Colors.grey[500]),
+                        prefixIcon: Icon(
+                          Icons.filter_list,
+                          color: Colors.grey[500],
+                        ),
                       ),
                       dropdownColor: Colors.white,
                       items: statusOptions
-                          .map((status) => DropdownMenuItem(
-                                value: status,
-                                child: Text(
-                                  status,
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                          .map(
+                            (status) => DropdownMenuItem(
+                              value: status,
+                              child: Text(
+                                status,
+                                style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontWeight: FontWeight.w500,
                                 ),
-                              ))
+                              ),
+                            ),
+                          )
                           .toList(),
                       onChanged: (value) {
                         setState(() {
@@ -183,7 +197,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       itemBuilder: (context, index) {
                         final project = filteredProjects[index];
                         return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
@@ -199,7 +216,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             leading: Container(
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: _getProjectColor(project.name).withOpacity(0.1),
+                                color: _getProjectColor(
+                                  project.name,
+                                ).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Icon(
@@ -229,9 +248,14 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                 ),
                                 SizedBox(height: 6),
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: _getStatusColor(project.status).withOpacity(0.1),
+                                    color: _getStatusColor(
+                                      project.status,
+                                    ).withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
@@ -250,13 +274,15 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                 Icons.info_outline,
                                 color: Colors.grey[500],
                               ),
-                              onPressed: () => _showProjectDetailsDialog(project),
+                              onPressed: () =>
+                                  _showProjectDetailsDialog(project),
                             ),
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => TaskScreen(projectId: project.id!),
+                                  builder: (context) =>
+                                      TaskScreen(projectId: project.id!),
                                 ),
                               );
                             },
@@ -284,7 +310,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
     final nameController = TextEditingController();
     final descController = TextEditingController();
     final statusController = TextEditingController();
-    final projectProvider = Provider.of<ProjectProvider>(context, listen: false);
+    final projectProvider = Provider.of<ProjectProvider>(
+      context,
+      listen: false,
+    );
 
     showDialog(
       context: context,
@@ -322,10 +351,14 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Color(0xFF4F46E5)),
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 12, 47, 75),
+                      ),
                     ),
                   ),
-                  validator: (value) => value == null || value.trim().isEmpty ? "Veuillez entrer un nom" : null,
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? "Veuillez entrer un nom"
+                      : null,
                 ),
                 SizedBox(height: 16),
                 TextFormField(
@@ -342,7 +375,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       borderSide: BorderSide(color: Color(0xFF4F46E5)),
                     ),
                   ),
-                  validator: (value) => value == null || value.trim().isEmpty ? "Veuillez entrer une description" : null,
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? "Veuillez entrer une description"
+                      : null,
                 ),
                 SizedBox(height: 16),
                 TextFormField(
@@ -359,7 +394,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       borderSide: BorderSide(color: Color(0xFF4F46E5)),
                     ),
                   ),
-                  validator: (value) => value == null || value.trim().isEmpty ? "Veuillez entrer un statut" : null,
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? "Veuillez entrer un statut"
+                      : null,
                 ),
                 SizedBox(height: 24),
                 Row(
@@ -382,7 +419,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF4F46E5),
+                          backgroundColor: Color.fromARGB(255, 12, 47, 75),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -402,7 +439,12 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text("Projet créé avec succès"),
-                                backgroundColor: Colors.green,
+                                backgroundColor: Color.fromARGB(
+                                  255,
+                                  12,
+                                  47,
+                                  75,
+                                ),
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
@@ -424,7 +466,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
   }
 
   void _showProjectDetailsDialog(ProjectModel project) {
-    final projectProvider = Provider.of<ProjectProvider>(context, listen: false);
+    final projectProvider = Provider.of<ProjectProvider>(
+      context,
+      listen: false,
+    );
     final nameController = TextEditingController(text: project.name);
     final descController = TextEditingController(text: project.description);
     final statusController = TextEditingController(text: project.status);
@@ -468,7 +513,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       borderSide: BorderSide(color: Color(0xFF4F46E5)),
                     ),
                   ),
-                  validator: (value) => value == null || value.trim().isEmpty ? "Champ requis" : null,
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? "Champ requis"
+                      : null,
                 ),
                 SizedBox(height: 12),
                 TextFormField(
@@ -484,7 +531,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       borderSide: BorderSide(color: Color(0xFF4F46E5)),
                     ),
                   ),
-                  validator: (value) => value == null || value.trim().isEmpty ? "Champ requis" : null,
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? "Champ requis"
+                      : null,
                 ),
                 SizedBox(height: 12),
                 TextFormField(
@@ -500,7 +549,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       borderSide: BorderSide(color: Color(0xFF4F46E5)),
                     ),
                   ),
-                  validator: (value) => value == null || value.trim().isEmpty ? "Champ requis" : null,
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? "Champ requis"
+                      : null,
                 ),
                 SizedBox(height: 24),
                 Row(
@@ -521,15 +572,22 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: Text("Confirmer la suppression"),
-                              content: Text("Voulez-vous vraiment supprimer ce projet ?"),
+                              content: Text(
+                                "Voulez-vous vraiment supprimer ce projet ?",
+                              ),
                               actions: [
                                 TextButton(
                                   child: Text("Annuler"),
-                                  onPressed: () => Navigator.of(context).pop(false),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
                                 ),
                                 TextButton(
-                                  child: Text("Supprimer", style: TextStyle(color: Colors.red)),
-                                  onPressed: () => Navigator.of(context).pop(true),
+                                  child: Text(
+                                    "Supprimer",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
                                 ),
                               ],
                             ),
