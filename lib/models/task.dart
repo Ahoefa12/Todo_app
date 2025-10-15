@@ -1,6 +1,6 @@
 class TaskModel {
   int? id;
-  int? project_id;
+  int project_id;
   String name;
   String description;
   String status;
@@ -9,7 +9,7 @@ class TaskModel {
 
   TaskModel({
     this.id,
-    this.project_id,
+    required this.project_id,
     required this.name,
     required this.description,
     required this.status,
