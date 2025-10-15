@@ -36,9 +36,7 @@ class _TaskScreenState extends State<TaskScreen> {
               itemBuilder: (context, index) {
                 final task = provider.tasks[index];
                 return ListTile(
-                  title: Text(task.name),
-                  subtitle: Text(task.description),
-                  trailing: Text(task.status),
+                  // trailing: Text(task.status),
                 );
               },
             );

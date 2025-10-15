@@ -26,13 +26,16 @@ class TaskProvider with ChangeNotifier {
     await _taskService.addTask(task);
     notifyListeners();
   }
+
   Future<void> updateTask(TaskModel task) async {
     await _taskService.updateTask(task);
     notifyListeners();
   }
+
+ 
+
   Future<void> deleteTask(TaskModel task) async {
     await _taskService.deleteTask(task);
     // fetchTasks(int projectId);
   }
 }
-
