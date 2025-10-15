@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         destinations: [
           NavigationDestination(icon: Icon(Icons.home), label: "Accueil"),
-          NavigationDestination(icon: Icon(Icons.bookmark_border), label: "Projet"),
+          NavigationDestination(icon: Icon(Icons.folder), label: "Projet"),
           NavigationDestination(icon: Icon(Icons.person), label: "Profil"),
           ]
         ),

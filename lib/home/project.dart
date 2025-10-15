@@ -12,29 +12,113 @@ class ProjectScreen extends StatefulWidget {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  String _selectedStatus = 'Tous';
+
   @override
   void initState() {
     super.initState();
-    // Appel de la récupération des catégories
-    final projectProvider = Provider.of<ProjectProvider>(
-      context,
-      listen: false,
-    );
+    final projectProvider = Provider.of<ProjectProvider>(context, listen: false);
     projectProvider.fetchProjects();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final projectProvider = Provider.of<ProjectProvider>(context);
+    final allProjects = projectProvider.projects;
+
+    final allStatuses = allProjects.map((p) => p.status).toSet().toList();
+    allStatuses.sort();
+    final statusOptions = ['Tous', ...allStatuses];
+
+    final filteredProjects = allProjects.where((project) {
+      final matchesSearch = project.name.toLowerCase().contains(_searchQuery.toLowerCase());
+      final matchesStatus = _selectedStatus == 'Tous' || project.status == _selectedStatus;
+      return matchesSearch && matchesStatus;
+    }).toList();
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Projets")),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: "Rechercher par nom",
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: DropdownButtonFormField<String>(
+              value: _selectedStatus,
+              decoration: const InputDecoration(
+                labelText: "Filtrer par statut",
+                border: OutlineInputBorder(),
+              ),
+              items: statusOptions
+                  .map((status) => DropdownMenuItem(value: status, child: Text(status)))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedStatus = value!;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: filteredProjects.isEmpty
+                ? const Center(child: Text('Aucun projet trouvé'))
+                : ListView.builder(
+                    itemCount: filteredProjects.length,
+                    itemBuilder: (context, index) {
+                      final project = filteredProjects[index];
+                      return ListTile(
+                        leading: const Icon(Icons.folder),
+                        title: Text(project.name),
+                        subtitle: Text(project.description),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.info_outline),
+                          onPressed: () => _showProjectDetailsDialog(project),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TaskScreen(projectId: project.id!),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => _showCreateProjectDialog(context),
+      ),
+    );
   }
 
   void _showCreateProjectDialog(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    final TextEditingController _projectNameController =
-        TextEditingController();
-    final TextEditingController _projectDescriptionController =
-        TextEditingController();
-    final TextEditingController _projectStatusController =
-        TextEditingController();
-    final projectProvider = Provider.of<ProjectProvider>(
-      context,
-      listen: false,
-    );
+    final nameController = TextEditingController();
+    final descController = TextEditingController();
+    final statusController = TextEditingController();
+    final projectProvider = Provider.of<ProjectProvider>(context, listen: false);
 
     showDialog(
       context: context,
@@ -46,45 +130,21 @@ class _ProjectScreenState extends State<ProjectScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                controller: _projectNameController,
-                decoration: const InputDecoration(
-                  labelText: "Nom du projet",
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Veuillez entrer un nom";
-                  }
-                  return null;
-                },
+                controller: nameController,
+                decoration: const InputDecoration(labelText: "Nom du projet", border: OutlineInputBorder()),
+                validator: (value) => value == null || value.trim().isEmpty ? "Veuillez entrer un nom" : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _projectDescriptionController,
-                decoration: const InputDecoration(
-                  labelText: "Nom du description",
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Veuillez entrer une description";
-                  }
-                  return null;
-                },
+                controller: descController,
+                decoration: const InputDecoration(labelText: "Description du projet", border: OutlineInputBorder()),
+                validator: (value) => value == null || value.trim().isEmpty ? "Veuillez entrer une description" : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _projectStatusController,
-                decoration: const InputDecoration(
-                  labelText: "Statut du projet",
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Veuillez entrer un statut";
-                  }
-                  return null;
-                },
+                controller: statusController,
+                decoration: const InputDecoration(labelText: "Statut du projet", border: OutlineInputBorder()),
+                validator: (value) => value == null || value.trim().isEmpty ? "Veuillez entrer un statut" : null,
               ),
             ],
           ),
@@ -98,18 +158,16 @@ class _ProjectScreenState extends State<ProjectScreen> {
             child: const Text("Créer"),
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                final projectName = _projectNameController.text.trim();
-                final projectDescription = _projectDescriptionController.text
-                    .trim();
-                final projectStatus = _projectStatusController.text.trim();
-                final newproject = ProjectModel(
-                  name: projectName,
-                  description: projectDescription,
-                  status: projectStatus,
+                final newProject = ProjectModel(
+                  name: nameController.text.trim(),
+                  description: descController.text.trim(),
+                  status: statusController.text.trim(),
                 );
-
-                await projectProvider.addProject(newproject);
+                await projectProvider.addProject(newProject);
                 Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Projet créé avec succès")),
+                );
               }
             },
           ),
@@ -118,52 +176,97 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: Consumer<ProjectProvider>(
-              builder: (context, provider, child) {
-                if (provider.projects.isEmpty) {
-                  return Center(child: Text('Aucun projet trouvé'));
-                } else {
-                  return ListView.builder(
-                    itemCount: provider.projects.length,
-                    itemBuilder: (context, index) {
-                      final project = provider.projects[index];
-                      return ListTile(
-                        leading: Icon(Icons.person),
-                        subtitle: Text(project.description),
-                        trailing: Text(project.status),
-                        title: Text(project.name),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  TaskScreen(projectId: project.id!),
-                            ),
-                          );
-                        },
-                        // onLongPress: () {
-                        //   _showDialog(context, project);
-                        // },
-                      );
-                    },
-                  );
-                }
-              },
+  void _showProjectDetailsDialog(ProjectModel project) {
+  final projectProvider = Provider.of<ProjectProvider>(context, listen: false);
+  final nameController = TextEditingController(text: project.name);
+  final descController = TextEditingController(text: project.description);
+  final statusController = TextEditingController(text: project.status);
+  final _formKey = GlobalKey<FormState>();
+
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text("Modifier le projet"),
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: "Nom"),
+              validator: (value) => value == null || value.trim().isEmpty ? "Champ requis" : null,
             ),
-          ),
-        ],
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: descController,
+              decoration: const InputDecoration(labelText: "Description"),
+              validator: (value) => value == null || value.trim().isEmpty ? "Champ requis" : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: statusController,
+              decoration: const InputDecoration(labelText: "Statut"),
+              validator: (value) => value == null || value.trim().isEmpty ? "Champ requis" : null,
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: ()=>_showCreateProjectDialog(context),
-      ),
-    );
-  }
+      actions: [
+        TextButton(
+          child: const Text("Supprimer", style: TextStyle(color: Colors.red)),
+          onPressed: () async {
+            final confirm = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text("Confirmer la suppression"),
+                content: const Text("Voulez-vous vraiment supprimer ce projet ?"),
+                actions: [
+                  TextButton(
+                    child: const Text("Annuler"),
+                    onPressed: () => Navigator.of(context).pop(false),
+                  ),
+                  TextButton(
+                    child: const Text("Supprimer", style: TextStyle(color: Colors.red)),
+                    onPressed: () => Navigator.of(context).pop(true),
+                  ),
+                ],
+              ),
+            );
+            if (confirm == true) {
+              await projectProvider.deleteProject(project);
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Projet supprimé")),
+              );
+            }
+          },
+        ),
+        TextButton(
+          child: const Text("Annuler"),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        ElevatedButton(
+          child: const Text("Enregistrer"),
+          onPressed: () async {
+            if (_formKey.currentState!.validate()) {
+              final updatedProject = ProjectModel(
+                id: project.id,
+                name: nameController.text.trim(),
+                description: descController.text.trim(),
+                status: statusController.text.trim(),
+              );
+              await projectProvider.updateProject(updatedProject);
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Projet modifié avec succès")),
+              );
+            }
+          },
+        ),
+      ],
+    ),
+  );
 }
+}
+      

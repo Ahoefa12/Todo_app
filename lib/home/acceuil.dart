@@ -13,7 +13,7 @@ class _AccueilScreenState extends State<AccueilScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 7, 100, 175),
+        backgroundColor: const Color.fromARGB(255, 12, 47, 75),
         title: Text("Focus Pro", style: TextStyle(color: Colors.white)),
         actions: [
           PopupMenuButton<String>(

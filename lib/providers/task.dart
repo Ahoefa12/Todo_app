@@ -14,21 +14,24 @@ class TaskProvider with ChangeNotifier {
   // }
   Future<void> fetchTasks(int projectId) async {
     // _isLoading = true;
-    notifyListeners();
+    
 
     _tasks = await _taskService.fetchTasksByProject(projectId);
 
     // _isLoading = false;
     notifyListeners();
+    
   }
 
   Future<void> addTask(TaskModel task) async {
     await _taskService.addTask(task);
+    await fetchTasks(task.project_id);
     notifyListeners();
   }
 
   Future<void> updateTask(TaskModel task) async {
     await _taskService.updateTask(task);
+    await fetchTasks(task.project_id);
     notifyListeners();
   }
 
@@ -36,6 +39,6 @@ class TaskProvider with ChangeNotifier {
 
   Future<void> deleteTask(TaskModel task) async {
     await _taskService.deleteTask(task);
-    // fetchTasks(int projectId);
+    await fetchTasks(task.project_id);
   }
 }

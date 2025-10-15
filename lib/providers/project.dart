@@ -15,15 +15,18 @@ class ProjectProvider with ChangeNotifier {
 
   Future<void> addProject(ProjectModel project) async {
     await _projectService.addProjects(project);
+    fetchProjects();
     notifyListeners();
   }
   Future<void> updateProject(ProjectModel project) async {
     await _projectService.updateProjects(project);
+    fetchProjects();
     notifyListeners();
   }
   Future<void> deleteProject(ProjectModel project) async {
     await _projectService.deleteProjects(project);
     fetchProjects();
+    
   }
 }
 
